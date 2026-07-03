@@ -1,0 +1,36 @@
+{
+  "PROFILE": {
+    "name": "Jonathan Jo",
+    "firstName": "Jonathan",
+    "lastName": "Jo",
+    "greeting": "Hi, I am",
+    "roles": ["IT Student", "Blockchain Learner", "AI Enthusiast", "Builder"],
+    "bio": "Fourth-semester IT student building at the intersection of blockchain, AI, and software engineering. I learn by shipping — every project here is a step toward production-grade work.",
+    "location": "Jakarta, Indonesia",
+    "email": "you@email.com",
+    "github": "https://github.com/yourusername",
+    "linkedin": "https://linkedin.com/in/yourusername",
+    "photo": "",
+    "logo": "/logo.png"
+  },
+
+  "PROJECTS": [],
+
+  "CERTIFICATES": [],
+
+  "STACK": [
+    "JavaScript", "TypeScript", "React", "Python",
+    "Solidity", "Node.js", "Git", "SQL", "Figma"
+  ],
+
+  "LANGUAGES": [
+    "Indonesian — Native",
+    "English"
+  ],
+
+  "CONTACTS": [
+    { "label": "Contact Me", "kind": "email" },
+    { "label": "Connect With Me", "kind": "linkedin" },
+    { "label": "Explore My Code", "kind": "github" }
+  ]
+}
