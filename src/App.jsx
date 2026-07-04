@@ -218,7 +218,7 @@ const css = `
 .pf-link {
   background: none; border: none;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 13px; letter-spacing: 0.22em;
+  font-size: 15px; letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--white);
   cursor: pointer;
