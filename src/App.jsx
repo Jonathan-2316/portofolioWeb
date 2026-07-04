@@ -1,18 +1,12 @@
-import { useState, useEffect, useRef, useCallback, useMemo, createContext, useContext } from "react";
-
-/* ============================================================
-   PORTFOLIO — Jonathan Jo
-   ------------------------------------------------------------
-   SEMUA ISI WEB SEKARANG DIATUR LEWAT SATU FILE:
-
-       public/content.json
-
-   Kamu TIDAK perlu menyentuh kode di file ini lagi.
-   Edit content.json → save → refresh browser → isi web berubah.
-
-   Data di bawah ini hanyalah NILAI CADANGAN (fallback) yang
-   dipakai kalau content.json tidak ada / rusak.
-   ============================================================ */
+import {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+  createContext,
+  useContext,
+} from "react";
 
 const DEFAULT_CONTENT = {
   PROFILE: {
@@ -32,8 +26,15 @@ const DEFAULT_CONTENT = {
   PROJECTS: [],
   CERTIFICATES: [],
   STACK: [
-    "JavaScript", "TypeScript", "React", "Python", "Solidity",
-    "Node.js", "Git", "SQL", "Figma",
+    "JavaScript",
+    "TypeScript",
+    "React",
+    "Python",
+    "Solidity",
+    "Node.js",
+    "Git",
+    "SQL",
+    "Figma",
   ],
   LANGUAGES: ["Indonesian — Native", "English"],
   CONTACTS: [
@@ -43,14 +44,14 @@ const DEFAULT_CONTENT = {
   ],
 };
 
-/* Gabungkan content.json dengan nilai cadangan,
-   supaya field yang lupa diisi tidak membuat web rusak */
 function mergeContent(base, json) {
   if (!json || typeof json !== "object") return base;
   return {
     PROFILE: { ...base.PROFILE, ...(json.PROFILE || {}) },
     PROJECTS: Array.isArray(json.PROJECTS) ? json.PROJECTS : base.PROJECTS,
-    CERTIFICATES: Array.isArray(json.CERTIFICATES) ? json.CERTIFICATES : base.CERTIFICATES,
+    CERTIFICATES: Array.isArray(json.CERTIFICATES)
+      ? json.CERTIFICATES
+      : base.CERTIFICATES,
     STACK: Array.isArray(json.STACK) ? json.STACK : base.STACK,
     LANGUAGES: Array.isArray(json.LANGUAGES) ? json.LANGUAGES : base.LANGUAGES,
     CONTACTS: Array.isArray(json.CONTACTS) ? json.CONTACTS : base.CONTACTS,
@@ -59,8 +60,6 @@ function mergeContent(base, json) {
 
 const ContentCtx = createContext(DEFAULT_CONTENT);
 const useContent = () => useContext(ContentCtx);
-
-/* ============================================================ */
 
 const css = `
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500&family=JetBrains+Mono:ital,wght@0,300;0,400;1,300&display=swap');
@@ -78,12 +77,6 @@ const css = `
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* ============================================
-   TYPE SYSTEM — hanya 3 gaya, dipakai konsisten:
-   .t-display : serif besar (judul / nama)
-   .t-body    : Manrope (paragraf)
-   .t-mono    : JetBrains Mono uppercase (label / kode)
-   ============================================ */
 .t-mono {
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
@@ -110,7 +103,6 @@ const css = `
   cursor: default;
 }
 
-/* scanlines CRT — unsur hacker, sangat halus */
 .pf-root::before {
   content: "";
   position: fixed; inset: 0;
@@ -125,7 +117,6 @@ const css = `
   );
 }
 
-/* grain */
 .pf-root::after {
   content: "";
   position: fixed; inset: 0;
@@ -142,7 +133,6 @@ const css = `
   opacity: 0.5;
 }
 
-/* ---------- CURSOR FX — programmer style ---------- */
 .pf-cursor {
   position: fixed; top: 0; left: 0;
   width: 38px; height: 38px;
@@ -191,7 +181,6 @@ const css = `
   .pf-cursor, .pf-trailchar { display: none; }
 }
 
-/* blinking cursor — aksen programmer */
 .pf-caret {
   display: inline-block;
   width: 8px; height: 1.1em;
@@ -202,7 +191,6 @@ const css = `
 }
 @keyframes blink { 50% { opacity: 0; } }
 
-/* ---------- NAV ---------- */
 .pf-nav {
   position: absolute; top: 0; left: 0; right: 0;
   display: flex; justify-content: space-between; align-items: center;
@@ -252,7 +240,6 @@ const css = `
 .pf-link.active::after { transform: scaleX(1); transform-origin: left; }
 .pf-link:focus-visible { outline: 1px solid var(--white); outline-offset: 4px; }
 
-/* ---------- PAGE SHELL ---------- */
 .pf-page {
   position: relative; z-index: 2;
   min-height: 100vh;
@@ -264,7 +251,6 @@ const css = `
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ---------- HOME ---------- */
 .pf-hero {
   min-height: 100vh;
   min-height: 100svh;
@@ -298,7 +284,6 @@ const css = `
   to   { transform: translateY(0); opacity: 1; }
 }
 
-/* terminal-style lines di bawah nama */
 .pf-term {
   margin-top: 40px;
   display: flex; flex-direction: column; gap: 12px;
@@ -314,7 +299,6 @@ const css = `
 .pf-term .ln .val { color: var(--white); }
 .pf-term .ln .cm { color: var(--mist); opacity: 0.8; }
 
-/* ---------- PIGGY BANK + BITCOIN (hero kanan) ---------- */
 .pf-piggy {
   position: absolute;
   right: 2vw;
@@ -500,7 +484,6 @@ const css = `
   50% { border-color: var(--silver); background: rgba(255,255,255,0.08); }
 }
 
-/* ---------- SECTION HEAD ---------- */
 .pf-section-head {
   padding-top: 17vh;
   margin-bottom: 8vh;
@@ -533,7 +516,6 @@ const css = `
   color: var(--silver);
 }
 
-/* ---------- PROJECT CARDS ---------- */
 .pf-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -642,7 +624,6 @@ const css = `
 .pf-card-link .arrow { transition: transform 0.4s cubic-bezier(0.22,1,0.36,1); }
 .pf-card:hover .pf-card-link .arrow { transform: translate(4px, -4px); }
 
-/* Coming Soon — teks di tengah tanpa box */
 .pf-soon {
   grid-column: 1 / -1;
   min-height: 38vh;
@@ -667,7 +648,6 @@ const css = `
   color: var(--paper);
 }
 
-/* ---------- PROFILE ---------- */
 .pf-profile-grid {
   display: grid;
   grid-template-columns: minmax(260px, 380px) 1fr;
@@ -691,12 +671,9 @@ const css = `
   position: relative;
   width: 100%; height: 100%;
   object-fit: cover;
-  filter: grayscale(1) contrast(1.05);
   border: 1px solid var(--line);
-  transition: filter 0.6s ease;
   display: block;
 }
-.pf-photo-frame:hover .pf-photo { filter: grayscale(0.2); }
 .pf-photo-ph {
   position: relative;
   width: 100%; height: 100%;
@@ -761,7 +738,6 @@ const css = `
 }
 .pf-chip:hover { border-color: var(--silver); color: var(--white); }
 
-/* ---------- CERTIFICATES ---------- */
 .pf-certs { margin-bottom: 10vh; }
 .pf-certgrid {
   display: grid;
@@ -788,10 +764,9 @@ const css = `
 .pf-cert-thumb img {
   width: 100%; height: 100%;
   object-fit: cover;
-  filter: grayscale(0.6);
-  transition: filter 0.5s ease, transform 0.7s cubic-bezier(0.22,1,0.36,1);
+  transition: transform 0.7s cubic-bezier(0.22,1,0.36,1);
 }
-.pf-cert:hover .pf-cert-thumb img { filter: grayscale(0); transform: scale(1.04); }
+.pf-cert:hover .pf-cert-thumb img { transform: scale(1.04); }
 .pf-cert-pdf {
   font-family: 'JetBrains Mono', monospace;
   font-size: 13px;
@@ -923,7 +898,6 @@ const css = `
 }
 .pf-contactrow:hover .pf-arrow { transform: translate(8px, -8px); color: var(--white); }
 
-/* ---------- FOOTER ---------- */
 .pf-footer {
   border-top: 1px solid var(--line);
   padding: 36px 6vw 40px;
@@ -957,7 +931,6 @@ const css = `
 }
 .pf-totop:hover .arrow { transform: translateY(-4px); }
 
-/* ---------- RESPONSIVE & MOTION ---------- */
 @media (max-width: 880px) {
   .pf-grid { grid-template-columns: 1fr; gap: 64px; }
   .pf-profile-grid { grid-template-columns: 1fr; gap: 48px; }
@@ -999,26 +972,28 @@ const css = `
 }
 `;
 
-/* ============================================================
-   ICONS
-   ============================================================ */
-
 const GitHubIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-    <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.27-.01-1.17-.02-2.12-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.16-1.18 3.16-1.18.63 1.59.24 2.76.12 3.05.74.8 1.18 1.83 1.18 3.09 0 4.43-2.69 5.4-5.26 5.68.41.36.78 1.06.78 2.14 0 1.54-.02 2.79-.02 3.17 0 .31.21.68.8.56A10.52 10.52 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/>
+    <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.27-.01-1.17-.02-2.12-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.16-1.18 3.16-1.18.63 1.59.24 2.76.12 3.05.74.8 1.18 1.83 1.18 3.09 0 4.43-2.69 5.4-5.26 5.68.41.36.78 1.06.78 2.14 0 1.54-.02 2.79-.02 3.17 0 .31.21.68.8.56A10.52 10.52 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z" />
   </svg>
 );
 
 const LinkedInIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-    <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57v11.45z"/>
+    <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57v11.45z" />
   </svg>
 );
 
 const MailIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
-    <rect x="3" y="5" width="18" height="14" rx="2"/>
-    <path d="M3 7l9 6 9-6"/>
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.6"
+    aria-hidden="true"
+  >
+    <rect x="3" y="5" width="18" height="14" rx="2" />
+    <path d="M3 7l9 6 9-6" />
   </svg>
 );
 
@@ -1028,11 +1003,6 @@ const ICONS = {
   github: <GitHubIcon />,
 };
 
-/* ============================================================
-   HOOKS & EFFECTS
-   ============================================================ */
-
-/* Efek "decrypt" ala hacker — huruf acak berputar lalu terkunci satu per satu */
 function ScrambleText({ text, className }) {
   const [display, setDisplay] = useState(text);
   useEffect(() => {
@@ -1057,14 +1027,14 @@ function ScrambleText({ text, className }) {
   return <span className={className}>{display}</span>;
 }
 
-/* Cursor FX — frame bracket [ ] yang mengikuti mouse dengan smooth lag,
-   koordinat live, dan jejak karakter kode yang memudar */
 function CursorFX() {
   const frameRef = useRef(null);
   const coordsRef = useRef(null);
   const [trail, setTrail] = useState([]);
   const [enabled] = useState(
-    () => typeof window !== "undefined" && window.matchMedia("(pointer: fine)").matches
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(pointer: fine)").matches,
   );
 
   useEffect(() => {
@@ -1095,12 +1065,10 @@ function CursorFX() {
       pos.x += (target.x - pos.x) * 0.14;
       pos.y += (target.y - pos.y) * 0.14;
       if (frameRef.current) {
-        frameRef.current.style.transform =
-          `translate(${pos.x}px, ${pos.y}px) translate(-50%, -50%)`;
+        frameRef.current.style.transform = `translate(${pos.x}px, ${pos.y}px) translate(-50%, -50%)`;
       }
       if (coordsRef.current) {
-        coordsRef.current.textContent =
-          `x:${Math.round(pos.x)} y:${Math.round(pos.y)}`;
+        coordsRef.current.textContent = `x:${Math.round(pos.x)} y:${Math.round(pos.y)}`;
       }
       raf = requestAnimationFrame(loop);
     };
@@ -1171,11 +1139,13 @@ function NetworkCanvas() {
       ctx.clearRect(0, 0, w, h);
       for (let i = 0; i < N; i++) {
         for (let j = i + 1; j < N; j++) {
-          const a = nodes[i], b = nodes[j];
-          const dx = a.x - b.x, dy = a.y - b.y;
+          const a = nodes[i],
+            b = nodes[j];
+          const dx = a.x - b.x,
+            dy = a.y - b.y;
           const d = Math.sqrt(dx * dx + dy * dy);
           if (d < LINK_DIST) {
-            ctx.strokeStyle = `rgba(255,255,255,${0.10 * (1 - d / LINK_DIST)})`;
+            ctx.strokeStyle = `rgba(255,255,255,${0.1 * (1 - d / LINK_DIST)})`;
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
@@ -1197,9 +1167,12 @@ function NetworkCanvas() {
           ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
           ctx.fill();
         }
-        n.x += n.vx; n.y += n.vy;
-        if (n.x < -20) n.x = w + 20; if (n.x > w + 20) n.x = -20;
-        if (n.y < -20) n.y = h + 20; if (n.y > h + 20) n.y = -20;
+        n.x += n.vx;
+        n.y += n.vy;
+        if (n.x < -20) n.x = w + 20;
+        if (n.x > w + 20) n.x = -20;
+        if (n.y < -20) n.y = h + 20;
+        if (n.y > h + 20) n.y = -20;
       }
       raf = requestAnimationFrame(draw);
     };
@@ -1213,7 +1186,6 @@ function NetworkCanvas() {
   return <canvas ref={ref} className="pf-net" />;
 }
 
-/* Typewriter — role diketik huruf per huruf seperti di terminal */
 function TypedRole() {
   const { PROFILE } = useContent();
   const [text, setText] = useState("");
@@ -1223,7 +1195,7 @@ function TypedRole() {
   useEffect(() => {
     const full = PROFILE.roles[roleIdx % PROFILE.roles.length] || "";
     let delay = deleting ? 40 : 85;
-    if (!deleting && text === full) delay = 2000;        // jeda setelah selesai diketik
+    if (!deleting && text === full) delay = 2000;
     if (deleting && text === "") delay = 400;
 
     const t = setTimeout(() => {
@@ -1246,8 +1218,10 @@ function HashTicker() {
   const [hash, setHash] = useState("");
   useEffect(() => {
     const gen = () =>
-      "0x" + Array.from({ length: 12 }, () =>
-        "0123456789abcdef"[Math.floor(Math.random() * 16)]
+      "0x" +
+      Array.from(
+        { length: 12 },
+        () => "0123456789abcdef"[Math.floor(Math.random() * 16)],
       ).join("");
     setHash(gen());
     const t = setInterval(() => setHash(gen()), 1800);
@@ -1256,18 +1230,18 @@ function HashTicker() {
   return <span className="val">{hash}…</span>;
 }
 
-/* Koin Bitcoin orange (sesuai referensi) */
 function BitcoinCoin({ className, style }) {
   return (
     <g className={className} style={style}>
       <circle className="pf-coin-face" cx="113" cy="16" r="13" />
       <circle className="pf-coin-ring" cx="113" cy="16" r="10" />
-      <text className="pf-coin-b" x="113" y="16.5">₿</text>
+      <text className="pf-coin-b" x="113" y="16.5">
+        ₿
+      </text>
     </g>
   );
 }
 
-/* Celengan babi (menghadap kiri) — klik untuk memberi makan koin */
 function PiggyBank() {
   const [burst, setBurst] = useState([]);
   const [partyKey, setPartyKey] = useState(0);
@@ -1286,7 +1260,6 @@ function PiggyBank() {
     }, 2600);
   };
 
-  /* bentuk babi menghadap kiri (badan + moncong menyatu) */
   const bodyPath = `M 30 96
     C 22 96, 18 102, 18 110
     C 18 118, 24 124, 33 124
@@ -1305,7 +1278,9 @@ function PiggyBank() {
       role="button"
       tabIndex={0}
       aria-label="Feed the piggy bank"
-      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") feed(); }}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") feed();
+      }}
     >
       <svg viewBox="0 0 210 178">
         <defs>
@@ -1315,10 +1290,8 @@ function PiggyBank() {
           </linearGradient>
         </defs>
 
-        {/* koin ambient (loop) */}
         <BitcoinCoin className="pf-coin" />
 
-        {/* koin burst saat diklik */}
         {burst.map((c) => (
           <g key={c.id} transform={`translate(${c.dx} 0)`}>
             <BitcoinCoin
@@ -1328,28 +1301,60 @@ function PiggyBank() {
           </g>
         ))}
 
-        {/* babi — menghadap kiri */}
-        <g className={`pigbody ${partyKey > 0 ? "party-once" : ""}`} key={partyKey}>
-          {/* kaki */}
-          <rect className="pig-fill" x="70" y="140" width="17" height="26" rx="7" />
-          <rect className="pig-fill" x="132" y="140" width="17" height="26" rx="7" />
-          {/* badan dengan moncong menyatu di kiri */}
+        <g
+          className={`pigbody ${partyKey > 0 ? "party-once" : ""}`}
+          key={partyKey}
+        >
+          <rect
+            className="pig-fill"
+            x="70"
+            y="140"
+            width="17"
+            height="26"
+            rx="7"
+          />
+          <rect
+            className="pig-fill"
+            x="132"
+            y="140"
+            width="17"
+            height="26"
+            rx="7"
+          />
           <path className="pig-fill" d={bodyPath} />
-          {/* highlight halus */}
-          <ellipse cx="84" cy="80" rx="36" ry="17" fill="#ffffff" opacity="0.05" />
-          {/* lipatan moncong */}
-          <path className="pig-line" d="M 42 88 C 38 98, 38 112, 43 121" strokeWidth="1.3" opacity="0.7" />
-          {/* lubang hidung */}
+          <ellipse
+            cx="84"
+            cy="80"
+            rx="36"
+            ry="17"
+            fill="#ffffff"
+            opacity="0.05"
+          />
+          <path
+            className="pig-line"
+            d="M 42 88 C 38 98, 38 112, 43 121"
+            strokeWidth="1.3"
+            opacity="0.7"
+          />
           <ellipse cx="25" cy="104" rx="1.7" ry="2.8" fill="var(--mist)" />
           <ellipse cx="25" cy="114" rx="1.7" ry="2.8" fill="var(--mist)" />
-          {/* mata */}
           <circle cx="60" cy="90" r="3.1" fill="var(--silver)" />
-          {/* telinga */}
           <path className="pig-fill" d={earPath} />
-          {/* ekor keriting di kanan */}
-          <path className="pig-line" d="M 177 94 C 193 88, 199 100, 189 105 C 183 108, 181 102, 186 99" strokeWidth="1.6" />
-          {/* slot koin di punggung */}
-          <rect x="96" y="46" width="34" height="6" rx="3" fill="var(--ink-0)" stroke="var(--silver)" strokeWidth="1.4" />
+          <path
+            className="pig-line"
+            d="M 177 94 C 193 88, 199 100, 189 105 C 183 108, 181 102, 186 99"
+            strokeWidth="1.6"
+          />
+          <rect
+            x="96"
+            y="46"
+            width="34"
+            height="6"
+            rx="3"
+            fill="var(--ink-0)"
+            stroke="var(--silver)"
+            strokeWidth="1.4"
+          />
         </g>
       </svg>
       <span className="pf-feedhint">click to feed</span>
@@ -1371,7 +1376,6 @@ function ChainAccent() {
   );
 }
 
-/* Logo nav — pakai gambar logo kamu; kalau file belum ada, fallback ke <JJ/> */
 function NavLogo() {
   const { PROFILE } = useContent();
   const [failed, setFailed] = useState(false);
@@ -1390,10 +1394,6 @@ function NavLogo() {
     </>
   );
 }
-
-/* ============================================================
-   PAGES
-   ============================================================ */
 
 function Home({ go }) {
   const { PROFILE } = useContent();
@@ -1414,21 +1414,39 @@ function Home({ go }) {
 
         <div className="pf-term">
           <div className="ln">
-            <span className="kw">role</span> &nbsp;—&nbsp; <TypedRole /><span className="pf-caret" />
+            <span className="kw">role</span> &nbsp;—&nbsp; <TypedRole />
+            <span className="pf-caret" />
           </div>
           <div className="ln">
-            <span className="kw">block</span> —&nbsp; <HashTicker /> <span className="cm">verified</span>
+            <span className="kw">block</span> —&nbsp; <HashTicker />{" "}
+            <span className="cm">verified</span>
           </div>
         </div>
 
         <div className="pf-hero-socials">
-          <a className="pf-icon-btn" href={PROFILE.github} target="_blank" rel="noreferrer" aria-label="GitHub">
+          <a
+            className="pf-icon-btn"
+            href={PROFILE.github}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="GitHub"
+          >
             <GitHubIcon />
           </a>
-          <a className="pf-icon-btn" href={PROFILE.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn">
+          <a
+            className="pf-icon-btn"
+            href={PROFILE.linkedin}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="LinkedIn"
+          >
             <LinkedInIcon />
           </a>
-          <a className="pf-icon-btn" href={`mailto:${PROFILE.email}`} aria-label="Email">
+          <a
+            className="pf-icon-btn"
+            href={`mailto:${PROFILE.email}`}
+            aria-label="Email"
+          >
             <MailIcon />
           </a>
         </div>
@@ -1471,7 +1489,9 @@ function Work() {
     <main className="pf-page">
       <header className="pf-section-head">
         <div className="pf-section-row">
-          <h2 className="pf-section-title"><ScrambleText text="Projects" /></h2>
+          <h2 className="pf-section-title">
+            <ScrambleText text="Projects" />
+          </h2>
           <span className="pf-count">
             {PROJECTS.length > 0
               ? String(PROJECTS.length).padStart(2, "0") + " shipped"
@@ -1496,7 +1516,9 @@ function Work() {
             <p className="pf-card-desc">{p.desc}</p>
             <div className="pf-card-tags">
               {p.tags.map((t) => (
-                <span className="pf-tag" key={t}>{t}</span>
+                <span className="pf-tag" key={t}>
+                  {t}
+                </span>
               ))}
             </div>
             <span className="pf-card-link">
@@ -1505,10 +1527,10 @@ function Work() {
           </a>
         ))}
 
-        {/* Kartu Coming Soon — selalu tampil di paling bawah */}
         <div className="pf-soon">
           <span className="code">
-            <span className="kw">await</span> nextProject()<span className="pf-caret" />
+            <span className="kw">await</span> nextProject()
+            <span className="pf-caret" />
           </span>
           <span className="sub">coming soon</span>
         </div>
@@ -1521,10 +1543,11 @@ function Profile() {
   const { PROFILE, STACK, LANGUAGES, CERTIFICATES, CONTACTS } = useContent();
   const bioParts = PROFILE.bio.split("—");
 
-  /* href & meta dihitung dari data profil, jadi content.json cukup berisi label + kind */
   const resolveContact = (c) => {
-    if (c.kind === "email") return { href: "mailto:" + PROFILE.email, meta: "email" };
-    if (c.kind === "linkedin") return { href: PROFILE.linkedin, meta: "linkedin" };
+    if (c.kind === "email")
+      return { href: "mailto:" + PROFILE.email, meta: "email" };
+    if (c.kind === "linkedin")
+      return { href: PROFILE.linkedin, meta: "linkedin" };
     if (c.kind === "github") return { href: PROFILE.github, meta: "github" };
     return { href: c.href || "#", meta: c.kind || "" };
   };
@@ -1533,7 +1556,9 @@ function Profile() {
     <main className="pf-page">
       <header className="pf-section-head">
         <div className="pf-section-row">
-          <h2 className="pf-section-title"><ScrambleText text="About Me" /></h2>
+          <h2 className="pf-section-title">
+            <ScrambleText text="About Me" />
+          </h2>
           <span className="pf-count">{PROFILE.location}</span>
         </div>
       </header>
@@ -1544,7 +1569,10 @@ function Profile() {
             <img className="pf-photo" src={PROFILE.photo} alt={PROFILE.name} />
           ) : (
             <div className="pf-photo-ph">
-              <span className="initial">{PROFILE.firstName[0]}{PROFILE.lastName[0]}</span>
+              <span className="initial">
+                {PROFILE.firstName[0]}
+                {PROFILE.lastName[0]}
+              </span>
               <span className="hint">your photo here</span>
             </div>
           )}
@@ -1559,7 +1587,9 @@ function Profile() {
             <div className="pf-about-label">Stack & Tools</div>
             <div className="pf-chiprow">
               {STACK.map((s) => (
-                <span className="pf-chip" key={s}>{s}</span>
+                <span className="pf-chip" key={s}>
+                  {s}
+                </span>
               ))}
             </div>
           </div>
@@ -1568,14 +1598,15 @@ function Profile() {
             <div className="pf-about-label">Languages</div>
             <div className="pf-chiprow">
               {LANGUAGES.map((l) => (
-                <span className="pf-chip" key={l}>{l}</span>
+                <span className="pf-chip" key={l}>
+                  {l}
+                </span>
               ))}
             </div>
           </div>
         </div>
       </div>
 
-      {/* ---------- CERTIFICATES ---------- */}
       <div className="pf-certs">
         <div className="pf-about-label">Certificates</div>
         {CERTIFICATES.length > 0 ? (
@@ -1610,7 +1641,10 @@ function Profile() {
           </div>
         ) : (
           <div className="pf-cert-empty">
-            <span className="code">certificates.push(<span className="kw">next</span>)<span className="pf-caret" /></span>
+            <span className="code">
+              certificates.push(<span className="kw">next</span>)
+              <span className="pf-caret" />
+            </span>
             <span className="sub">coming soon</span>
           </div>
         )}
@@ -1629,7 +1663,12 @@ function Profile() {
           const r = resolveContact(c);
           return (
             <li key={c.label}>
-              <a className="pf-contactrow" href={r.href} target="_blank" rel="noreferrer">
+              <a
+                className="pf-contactrow"
+                href={r.href}
+                target="_blank"
+                rel="noreferrer"
+              >
                 <span className="pf-contacticon">{ICONS[c.kind]}</span>
                 <span className="pf-contactlabel">{c.label}</span>
                 <span className="pf-contactmeta">{r.meta}</span>
@@ -1643,14 +1682,10 @@ function Profile() {
   );
 }
 
-/* ============================================================ */
-
 export default function PortfolioSite() {
   const [page, setPage] = useState("home");
   const [content, setContent] = useState(DEFAULT_CONTENT);
 
-  /* Ambil isi web dari public/content.json.
-     Kalau file tidak ada atau rusak, nilai cadangan tetap dipakai. */
   useEffect(() => {
     fetch("/content.json")
       .then((r) => (r.ok ? r.json() : null))
@@ -1682,7 +1717,11 @@ export default function PortfolioSite() {
                 className={`pf-link ${page === p ? "active" : ""}`}
                 onClick={() => go(p)}
               >
-                {p === "home" ? "Homepage" : p === "work" ? "Projects" : "About Me"}
+                {p === "home"
+                  ? "Homepage"
+                  : p === "work"
+                    ? "Projects"
+                    : "About Me"}
               </button>
             ))}
           </div>
@@ -1694,10 +1733,14 @@ export default function PortfolioSite() {
 
         <footer className="pf-footer">
           <span className="left">
-            <span className="kw">©</span> 2026 — designed & built by {content.PROFILE.name}
+            <span className="kw">©</span> 2026 — designed & built by{" "}
+            {content.PROFILE.name}
           </span>
           <ChainAccent />
-          <button className="pf-totop" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+          <button
+            className="pf-totop"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          >
             Back to top <span className="arrow">↑</span>
           </button>
         </footer>
