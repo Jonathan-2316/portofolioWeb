@@ -1,12 +1,4 @@
-import {
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-  useMemo,
-  createContext,
-  useContext,
-} from "react";
+import { useState, useEffect, useRef, useCallback, useMemo, createContext, useContext } from "react";
 
 const DEFAULT_CONTENT = {
   PROFILE: {
@@ -26,15 +18,8 @@ const DEFAULT_CONTENT = {
   PROJECTS: [],
   CERTIFICATES: [],
   STACK: [
-    "JavaScript",
-    "TypeScript",
-    "React",
-    "Python",
-    "Solidity",
-    "Node.js",
-    "Git",
-    "SQL",
-    "Figma",
+    "JavaScript", "TypeScript", "React", "Python", "Solidity",
+    "Node.js", "Git", "SQL", "Figma",
   ],
   LANGUAGES: ["Indonesian — Native", "English"],
   CONTACTS: [
@@ -49,9 +34,7 @@ function mergeContent(base, json) {
   return {
     PROFILE: { ...base.PROFILE, ...(json.PROFILE || {}) },
     PROJECTS: Array.isArray(json.PROJECTS) ? json.PROJECTS : base.PROJECTS,
-    CERTIFICATES: Array.isArray(json.CERTIFICATES)
-      ? json.CERTIFICATES
-      : base.CERTIFICATES,
+    CERTIFICATES: Array.isArray(json.CERTIFICATES) ? json.CERTIFICATES : base.CERTIFICATES,
     STACK: Array.isArray(json.STACK) ? json.STACK : base.STACK,
     LANGUAGES: Array.isArray(json.LANGUAGES) ? json.LANGUAGES : base.LANGUAGES,
     CONTACTS: Array.isArray(json.CONTACTS) ? json.CONTACTS : base.CONTACTS,
@@ -208,7 +191,7 @@ const css = `
 }
 .pf-logo .dim { opacity: 0.5; }
 .pf-logo img {
-  height: 62px;
+  height: 78px;
   width: auto;
   display: block;
   object-fit: contain;
@@ -304,7 +287,7 @@ const css = `
   right: 2vw;
   top: 50%;
   transform: translateY(-50%);
-  width: clamp(190px, 25vw, 320px);
+  width: clamp(240px, 34vw, 480px);
   cursor: pointer;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
@@ -974,26 +957,20 @@ const css = `
 
 const GitHubIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-    <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.27-.01-1.17-.02-2.12-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.16-1.18 3.16-1.18.63 1.59.24 2.76.12 3.05.74.8 1.18 1.83 1.18 3.09 0 4.43-2.69 5.4-5.26 5.68.41.36.78 1.06.78 2.14 0 1.54-.02 2.79-.02 3.17 0 .31.21.68.8.56A10.52 10.52 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z" />
+    <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.27-.01-1.17-.02-2.12-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.16-1.18 3.16-1.18.63 1.59.24 2.76.12 3.05.74.8 1.18 1.83 1.18 3.09 0 4.43-2.69 5.4-5.26 5.68.41.36.78 1.06.78 2.14 0 1.54-.02 2.79-.02 3.17 0 .31.21.68.8.56A10.52 10.52 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/>
   </svg>
 );
 
 const LinkedInIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-    <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57v11.45z" />
+    <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57v11.45z"/>
   </svg>
 );
 
 const MailIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.6"
-    aria-hidden="true"
-  >
-    <rect x="3" y="5" width="18" height="14" rx="2" />
-    <path d="M3 7l9 6 9-6" />
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+    <rect x="3" y="5" width="18" height="14" rx="2"/>
+    <path d="M3 7l9 6 9-6"/>
   </svg>
 );
 
@@ -1032,9 +1009,7 @@ function CursorFX() {
   const coordsRef = useRef(null);
   const [trail, setTrail] = useState([]);
   const [enabled] = useState(
-    () =>
-      typeof window !== "undefined" &&
-      window.matchMedia("(pointer: fine)").matches,
+    () => typeof window !== "undefined" && window.matchMedia("(pointer: fine)").matches
   );
 
   useEffect(() => {
@@ -1065,10 +1040,12 @@ function CursorFX() {
       pos.x += (target.x - pos.x) * 0.14;
       pos.y += (target.y - pos.y) * 0.14;
       if (frameRef.current) {
-        frameRef.current.style.transform = `translate(${pos.x}px, ${pos.y}px) translate(-50%, -50%)`;
+        frameRef.current.style.transform =
+          `translate(${pos.x}px, ${pos.y}px) translate(-50%, -50%)`;
       }
       if (coordsRef.current) {
-        coordsRef.current.textContent = `x:${Math.round(pos.x)} y:${Math.round(pos.y)}`;
+        coordsRef.current.textContent =
+          `x:${Math.round(pos.x)} y:${Math.round(pos.y)}`;
       }
       raf = requestAnimationFrame(loop);
     };
@@ -1139,13 +1116,11 @@ function NetworkCanvas() {
       ctx.clearRect(0, 0, w, h);
       for (let i = 0; i < N; i++) {
         for (let j = i + 1; j < N; j++) {
-          const a = nodes[i],
-            b = nodes[j];
-          const dx = a.x - b.x,
-            dy = a.y - b.y;
+          const a = nodes[i], b = nodes[j];
+          const dx = a.x - b.x, dy = a.y - b.y;
           const d = Math.sqrt(dx * dx + dy * dy);
           if (d < LINK_DIST) {
-            ctx.strokeStyle = `rgba(255,255,255,${0.1 * (1 - d / LINK_DIST)})`;
+            ctx.strokeStyle = `rgba(255,255,255,${0.10 * (1 - d / LINK_DIST)})`;
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
@@ -1167,12 +1142,9 @@ function NetworkCanvas() {
           ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
           ctx.fill();
         }
-        n.x += n.vx;
-        n.y += n.vy;
-        if (n.x < -20) n.x = w + 20;
-        if (n.x > w + 20) n.x = -20;
-        if (n.y < -20) n.y = h + 20;
-        if (n.y > h + 20) n.y = -20;
+        n.x += n.vx; n.y += n.vy;
+        if (n.x < -20) n.x = w + 20; if (n.x > w + 20) n.x = -20;
+        if (n.y < -20) n.y = h + 20; if (n.y > h + 20) n.y = -20;
       }
       raf = requestAnimationFrame(draw);
     };
@@ -1218,10 +1190,8 @@ function HashTicker() {
   const [hash, setHash] = useState("");
   useEffect(() => {
     const gen = () =>
-      "0x" +
-      Array.from(
-        { length: 12 },
-        () => "0123456789abcdef"[Math.floor(Math.random() * 16)],
+      "0x" + Array.from({ length: 12 }, () =>
+        "0123456789abcdef"[Math.floor(Math.random() * 16)]
       ).join("");
     setHash(gen());
     const t = setInterval(() => setHash(gen()), 1800);
@@ -1235,9 +1205,7 @@ function BitcoinCoin({ className, style }) {
     <g className={className} style={style}>
       <circle className="pf-coin-face" cx="113" cy="16" r="13" />
       <circle className="pf-coin-ring" cx="113" cy="16" r="10" />
-      <text className="pf-coin-b" x="113" y="16.5">
-        ₿
-      </text>
+      <text className="pf-coin-b" x="113" y="16.5">₿</text>
     </g>
   );
 }
@@ -1278,9 +1246,7 @@ function PiggyBank() {
       role="button"
       tabIndex={0}
       aria-label="Feed the piggy bank"
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") feed();
-      }}
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") feed(); }}
     >
       <svg viewBox="0 0 210 178">
         <defs>
@@ -1301,60 +1267,18 @@ function PiggyBank() {
           </g>
         ))}
 
-        <g
-          className={`pigbody ${partyKey > 0 ? "party-once" : ""}`}
-          key={partyKey}
-        >
-          <rect
-            className="pig-fill"
-            x="70"
-            y="140"
-            width="17"
-            height="26"
-            rx="7"
-          />
-          <rect
-            className="pig-fill"
-            x="132"
-            y="140"
-            width="17"
-            height="26"
-            rx="7"
-          />
+        <g className={`pigbody ${partyKey > 0 ? "party-once" : ""}`} key={partyKey}>
+          <rect className="pig-fill" x="70" y="140" width="17" height="26" rx="7" />
+          <rect className="pig-fill" x="132" y="140" width="17" height="26" rx="7" />
           <path className="pig-fill" d={bodyPath} />
-          <ellipse
-            cx="84"
-            cy="80"
-            rx="36"
-            ry="17"
-            fill="#ffffff"
-            opacity="0.05"
-          />
-          <path
-            className="pig-line"
-            d="M 42 88 C 38 98, 38 112, 43 121"
-            strokeWidth="1.3"
-            opacity="0.7"
-          />
+          <ellipse cx="84" cy="80" rx="36" ry="17" fill="#ffffff" opacity="0.05" />
+          <path className="pig-line" d="M 42 88 C 38 98, 38 112, 43 121" strokeWidth="1.3" opacity="0.7" />
           <ellipse cx="25" cy="104" rx="1.7" ry="2.8" fill="var(--mist)" />
           <ellipse cx="25" cy="114" rx="1.7" ry="2.8" fill="var(--mist)" />
           <circle cx="60" cy="90" r="3.1" fill="var(--silver)" />
           <path className="pig-fill" d={earPath} />
-          <path
-            className="pig-line"
-            d="M 177 94 C 193 88, 199 100, 189 105 C 183 108, 181 102, 186 99"
-            strokeWidth="1.6"
-          />
-          <rect
-            x="96"
-            y="46"
-            width="34"
-            height="6"
-            rx="3"
-            fill="var(--ink-0)"
-            stroke="var(--silver)"
-            strokeWidth="1.4"
-          />
+          <path className="pig-line" d="M 177 94 C 193 88, 199 100, 189 105 C 183 108, 181 102, 186 99" strokeWidth="1.6" />
+          <rect x="96" y="46" width="34" height="6" rx="3" fill="var(--ink-0)" stroke="var(--silver)" strokeWidth="1.4" />
         </g>
       </svg>
       <span className="pf-feedhint">click to feed</span>
@@ -1414,39 +1338,21 @@ function Home({ go }) {
 
         <div className="pf-term">
           <div className="ln">
-            <span className="kw">role</span> &nbsp;—&nbsp; <TypedRole />
-            <span className="pf-caret" />
+            <span className="kw">role</span> &nbsp;—&nbsp; <TypedRole /><span className="pf-caret" />
           </div>
           <div className="ln">
-            <span className="kw">block</span> —&nbsp; <HashTicker />{" "}
-            <span className="cm">verified</span>
+            <span className="kw">block</span> —&nbsp; <HashTicker /> <span className="cm">verified</span>
           </div>
         </div>
 
         <div className="pf-hero-socials">
-          <a
-            className="pf-icon-btn"
-            href={PROFILE.github}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="GitHub"
-          >
+          <a className="pf-icon-btn" href={PROFILE.github} target="_blank" rel="noreferrer" aria-label="GitHub">
             <GitHubIcon />
           </a>
-          <a
-            className="pf-icon-btn"
-            href={PROFILE.linkedin}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="LinkedIn"
-          >
+          <a className="pf-icon-btn" href={PROFILE.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn">
             <LinkedInIcon />
           </a>
-          <a
-            className="pf-icon-btn"
-            href={`mailto:${PROFILE.email}`}
-            aria-label="Email"
-          >
+          <a className="pf-icon-btn" href={`mailto:${PROFILE.email}`} aria-label="Email">
             <MailIcon />
           </a>
         </div>
@@ -1489,9 +1395,7 @@ function Work() {
     <main className="pf-page">
       <header className="pf-section-head">
         <div className="pf-section-row">
-          <h2 className="pf-section-title">
-            <ScrambleText text="Projects" />
-          </h2>
+          <h2 className="pf-section-title"><ScrambleText text="Projects" /></h2>
           <span className="pf-count">
             {PROJECTS.length > 0
               ? String(PROJECTS.length).padStart(2, "0") + " shipped"
@@ -1516,9 +1420,7 @@ function Work() {
             <p className="pf-card-desc">{p.desc}</p>
             <div className="pf-card-tags">
               {p.tags.map((t) => (
-                <span className="pf-tag" key={t}>
-                  {t}
-                </span>
+                <span className="pf-tag" key={t}>{t}</span>
               ))}
             </div>
             <span className="pf-card-link">
@@ -1529,8 +1431,7 @@ function Work() {
 
         <div className="pf-soon">
           <span className="code">
-            <span className="kw">await</span> nextProject()
-            <span className="pf-caret" />
+            <span className="kw">await</span> nextProject()<span className="pf-caret" />
           </span>
           <span className="sub">coming soon</span>
         </div>
@@ -1544,10 +1445,8 @@ function Profile() {
   const bioParts = PROFILE.bio.split("—");
 
   const resolveContact = (c) => {
-    if (c.kind === "email")
-      return { href: "mailto:" + PROFILE.email, meta: "email" };
-    if (c.kind === "linkedin")
-      return { href: PROFILE.linkedin, meta: "linkedin" };
+    if (c.kind === "email") return { href: "mailto:" + PROFILE.email, meta: "email" };
+    if (c.kind === "linkedin") return { href: PROFILE.linkedin, meta: "linkedin" };
     if (c.kind === "github") return { href: PROFILE.github, meta: "github" };
     return { href: c.href || "#", meta: c.kind || "" };
   };
@@ -1556,9 +1455,7 @@ function Profile() {
     <main className="pf-page">
       <header className="pf-section-head">
         <div className="pf-section-row">
-          <h2 className="pf-section-title">
-            <ScrambleText text="About Me" />
-          </h2>
+          <h2 className="pf-section-title"><ScrambleText text="About Me" /></h2>
           <span className="pf-count">{PROFILE.location}</span>
         </div>
       </header>
@@ -1569,10 +1466,7 @@ function Profile() {
             <img className="pf-photo" src={PROFILE.photo} alt={PROFILE.name} />
           ) : (
             <div className="pf-photo-ph">
-              <span className="initial">
-                {PROFILE.firstName[0]}
-                {PROFILE.lastName[0]}
-              </span>
+              <span className="initial">{PROFILE.firstName[0]}{PROFILE.lastName[0]}</span>
               <span className="hint">your photo here</span>
             </div>
           )}
@@ -1587,9 +1481,7 @@ function Profile() {
             <div className="pf-about-label">Stack & Tools</div>
             <div className="pf-chiprow">
               {STACK.map((s) => (
-                <span className="pf-chip" key={s}>
-                  {s}
-                </span>
+                <span className="pf-chip" key={s}>{s}</span>
               ))}
             </div>
           </div>
@@ -1598,9 +1490,7 @@ function Profile() {
             <div className="pf-about-label">Languages</div>
             <div className="pf-chiprow">
               {LANGUAGES.map((l) => (
-                <span className="pf-chip" key={l}>
-                  {l}
-                </span>
+                <span className="pf-chip" key={l}>{l}</span>
               ))}
             </div>
           </div>
@@ -1641,10 +1531,7 @@ function Profile() {
           </div>
         ) : (
           <div className="pf-cert-empty">
-            <span className="code">
-              certificates.push(<span className="kw">next</span>)
-              <span className="pf-caret" />
-            </span>
+            <span className="code">certificates.push(<span className="kw">next</span>)<span className="pf-caret" /></span>
             <span className="sub">coming soon</span>
           </div>
         )}
@@ -1663,12 +1550,7 @@ function Profile() {
           const r = resolveContact(c);
           return (
             <li key={c.label}>
-              <a
-                className="pf-contactrow"
-                href={r.href}
-                target="_blank"
-                rel="noreferrer"
-              >
+              <a className="pf-contactrow" href={r.href} target="_blank" rel="noreferrer">
                 <span className="pf-contacticon">{ICONS[c.kind]}</span>
                 <span className="pf-contactlabel">{c.label}</span>
                 <span className="pf-contactmeta">{r.meta}</span>
@@ -1717,11 +1599,7 @@ export default function PortfolioSite() {
                 className={`pf-link ${page === p ? "active" : ""}`}
                 onClick={() => go(p)}
               >
-                {p === "home"
-                  ? "Homepage"
-                  : p === "work"
-                    ? "Projects"
-                    : "About Me"}
+                {p === "home" ? "Homepage" : p === "work" ? "Projects" : "About Me"}
               </button>
             ))}
           </div>
@@ -1733,14 +1611,10 @@ export default function PortfolioSite() {
 
         <footer className="pf-footer">
           <span className="left">
-            <span className="kw">©</span> 2026 — designed & built by{" "}
-            {content.PROFILE.name}
+            <span className="kw">©</span> 2026 — designed & built by {content.PROFILE.name}
           </span>
           <ChainAccent />
-          <button
-            className="pf-totop"
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          >
+          <button className="pf-totop" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
             Back to top <span className="arrow">↑</span>
           </button>
         </footer>
