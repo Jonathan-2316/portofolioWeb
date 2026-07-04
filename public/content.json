@@ -7,10 +7,10 @@
     "roles": ["IT Student", "Blockchain Learner", "AI Enthusiast", "Builder"],
     "bio": "Fourth-semester IT student building at the intersection of blockchain, AI, and software engineering. I learn by shipping — every project here is a step toward production-grade work.",
     "location": "Jakarta, Indonesia",
-    "email": "you@email.com",
-    "github": "https://github.com/yourusername",
-    "linkedin": "https://linkedin.com/in/yourusername",
-    "photo": "",
+    "email": "onlyjonathan23@gmail.com",
+    "github": "https://github.com/Jonathan-2316/",
+    "linkedin": "https://www.linkedin.com/in/jonathanjo/",
+    "photo": "/photoProfile.png",
     "logo": "/logo.png"
   },
 
@@ -19,14 +19,18 @@
   "CERTIFICATES": [],
 
   "STACK": [
-    "JavaScript", "TypeScript", "React", "Python",
-    "Solidity", "Node.js", "Git", "SQL", "Figma"
+    "JavaScript",
+    "TypeScript",
+    "React",
+    "Python",
+    "Solidity",
+    "Node.js",
+    "Git",
+    "SQL",
+    "Figma"
   ],
 
-  "LANGUAGES": [
-    "Indonesian — Native",
-    "English"
-  ],
+  "LANGUAGES": ["Indonesian — Native", "English"],
 
   "CONTACTS": [
     { "label": "Contact Me", "kind": "email" },
