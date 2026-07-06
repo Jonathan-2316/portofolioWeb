@@ -25,6 +25,7 @@ const DEFAULT_CONTENT = {
   },
   PROJECTS: [],
   CERTIFICATES: [],
+  EXPERIENCES: [],
   STACK: [
     "JavaScript",
     "TypeScript",
@@ -52,6 +53,9 @@ function mergeContent(base, json) {
     CERTIFICATES: Array.isArray(json.CERTIFICATES)
       ? json.CERTIFICATES
       : base.CERTIFICATES,
+    EXPERIENCES: Array.isArray(json.EXPERIENCES)
+      ? json.EXPERIENCES
+      : base.EXPERIENCES,
     STACK: Array.isArray(json.STACK) ? json.STACK : base.STACK,
     LANGUAGES: Array.isArray(json.LANGUAGES) ? json.LANGUAGES : base.LANGUAGES,
     CONTACTS: Array.isArray(json.CONTACTS) ? json.CONTACTS : base.CONTACTS,
@@ -299,89 +303,93 @@ const css = `
 .pf-term .ln .val { color: var(--white); }
 .pf-term .ln .cm { color: var(--mist); opacity: 0.8; }
 
-.pf-piggy {
+.pf-netgraph {
   position: absolute;
   right: 2vw;
   top: 50%;
   transform: translateY(-50%);
-  width: clamp(240px, 34vw, 480px);
-  cursor: pointer;
+  width: clamp(280px, 38vw, 540px);
   user-select: none;
-  -webkit-tap-highlight-color: transparent;
 }
-.pf-piggy svg { width: 100%; height: auto; display: block; overflow: visible; }
-.pf-piggy .pig-fill {
-  fill: url(#pigGrad);
-  stroke: var(--silver);
-  stroke-width: 1.8;
-  stroke-linejoin: round;
+.pf-netgraph svg {
+  width: 100%; height: auto; display: block; overflow: visible;
+  pointer-events: none; /* drag ditangkap lingkaran .ng-hit, area di luar globe tembus */
 }
-.pf-piggy .pig-line {
+.pf-netgraph .ng-edge {
   fill: none;
   stroke: var(--silver);
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  stroke-width: 1;
+  opacity: 0.4;
 }
-.pf-piggy .pig-outline {
+.pf-netgraph .ng-edge.dash {
+  stroke-dasharray: 4 6;
+  opacity: 0.3;
+  animation: ngDashFlow 1.6s linear infinite;
+}
+@keyframes ngDashFlow {
+  to { stroke-dashoffset: -20; }
+}
+.pf-netgraph .ng-pulse {
+  fill: var(--white);
+  opacity: 0;
+}
+.pf-netgraph .ng-hit {
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
+}
+.pf-netgraph .ng-hit:active { cursor: grabbing; }
+.pf-netgraph .ng-shape {
+  fill: rgba(7, 7, 8, 0.6); /* hit-area solid tapi visual tetap gelap */
+  stroke: var(--white);
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+  opacity: 0.9;
+  transition: stroke-width 0.25s ease;
+}
+.pf-netgraph .ng-shape.dim { stroke: var(--silver); opacity: 0.55; }
+.pf-netgraph .ng-inner {
   fill: none;
   stroke: var(--silver);
-  stroke-width: 1.6;
-  stroke-linejoin: round;
+  stroke-width: 1;
+  opacity: 0.6;
+  pointer-events: none;
 }
-.pf-piggy .pigbody {
-  transform-origin: 105px 105px;
-  animation: pigBounce 2.8s ease infinite;
+.pf-netgraph .ng-glowring {
+  fill: none;
+  stroke: var(--white);
+  stroke-width: 1;
+  pointer-events: none;
+  animation: ngPulse 4.2s ease-in-out infinite;
 }
-.pf-piggy .pigbody.party-once {
-  animation:
-    pigParty 0.8s cubic-bezier(0.34, 1.56, 0.64, 1),
-    pigBounce 2.8s ease 0.85s infinite;
+.pf-netgraph .ng-glowring.slow { animation-duration: 6s; animation-delay: 1.4s; }
+@keyframes ngPulse {
+  0%, 100% { opacity: 0.25; filter: drop-shadow(0 0 3px rgba(255,255,255,0.5)); }
+  50%      { opacity: 0.9;  filter: drop-shadow(0 0 10px rgba(255,255,255,0.95)); }
 }
-@keyframes pigBounce {
-  0%, 55%, 100% { transform: scale(1); }
-  62% { transform: scale(1.03, 0.97); }
-  70% { transform: scale(0.99, 1.01); }
-  78% { transform: scale(1); }
+.pf-netgraph .ng-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  fill: var(--mist);
+  pointer-events: none;
 }
-@keyframes pigParty {
-  0%   { transform: scale(1) rotate(0deg); }
-  25%  { transform: scale(1.07, 0.93) rotate(-2.5deg); }
-  50%  { transform: scale(0.96, 1.04) rotate(2deg); }
-  75%  { transform: scale(1.03, 0.97) rotate(-1deg); }
-  100% { transform: scale(1) rotate(0deg); }
-}
-.pf-coin, .pf-coin-burst {
+.pf-netgraph .ng-accent {
+  fill: none;
+  stroke: var(--mist);
+  stroke-width: 1;
+  opacity: 0.55;
+  animation: ngDrift 7s ease-in-out infinite;
   transform-box: fill-box;
-  transform-origin: 50% 100%;
+  transform-origin: center;
 }
-.pf-coin { animation: coinDrop 2.8s cubic-bezier(0.45, 0, 0.7, 1) infinite; }
-.pf-coin-burst { animation: coinDropOnce 1.05s cubic-bezier(0.45, 0, 0.7, 1) both; }
-@keyframes coinDrop {
-  0%   { transform: translateY(-36px); opacity: 0; }
-  12%  { transform: translateY(-36px); opacity: 1; }
-  52%  { transform: translateY(26px); opacity: 1; }
-  60%  { transform: translateY(34px) scaleY(0.35); opacity: 0; }
-  100% { transform: translateY(34px); opacity: 0; }
+.pf-netgraph .ng-accent.a2 { animation-delay: 2.2s; animation-duration: 8.5s; }
+.pf-netgraph .ng-accent.a3 { animation-delay: 4s; animation-duration: 10s; }
+@keyframes ngDrift {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-8px) rotate(6deg); }
 }
-@keyframes coinDropOnce {
-  0%   { transform: translateY(-48px); opacity: 0; }
-  14%  { transform: translateY(-48px); opacity: 1; }
-  68%  { transform: translateY(26px); opacity: 1; }
-  80%  { transform: translateY(34px) scaleY(0.35); opacity: 0; }
-  100% { transform: translateY(34px); opacity: 0; }
-}
-.pf-coin-face { fill: #F7931A; }
-.pf-coin-ring { fill: none; stroke: #ffffff; stroke-width: 1.4; }
-.pf-coin-b {
-  font-family: 'Manrope', sans-serif;
-  font-weight: 600;
-  font-size: 13px;
-  fill: #ffffff;
-  text-anchor: middle;
-  dominant-baseline: central;
-}
-.pf-feedhint {
+.pf-nethint {
   position: absolute;
   bottom: -26px;
   left: 50%;
@@ -395,9 +403,9 @@ const css = `
   opacity: 0;
   transition: opacity 0.4s ease;
 }
-.pf-piggy:hover .pf-feedhint { opacity: 1; }
+.pf-netgraph:hover .pf-nethint { opacity: 1; }
 @media (max-width: 880px) {
-  .pf-piggy { display: none; }
+  .pf-netgraph { display: none; }
 }
 
 .pf-hero-socials {
@@ -1230,134 +1238,296 @@ function HashTicker() {
   return <span className="val">{hash}…</span>;
 }
 
-function BitcoinCoin({ className, style }) {
-  return (
-    <g className={className} style={style}>
-      <circle className="pf-coin-face" cx="113" cy="16" r="13" />
-      <circle className="pf-coin-ring" cx="113" cy="16" r="10" />
-      <text className="pf-coin-b" x="113" y="16.5">
-        ₿
-      </text>
-    </g>
-  );
-}
+function NetworkGraph() {
+  const svgRef = useRef(null);
+  const hitRef = useRef(null);
+  const nodeElsRef = useRef([]);
+  const edgeElsRef = useRef([]);
+  const pulseElsRef = useRef([]);
 
-function PiggyBank() {
-  const [burst, setBurst] = useState([]);
-  const [partyKey, setPartyKey] = useState(0);
+  // Globe wireframe: titik disebar merata di permukaan bola via spiral fibonacci,
+  // lalu tiap titik disambung ke 2 tetangga terdekatnya membentuk jaring blockchain/AI
+  const { NODES, EDGES, PULSES } = useMemo(() => {
+    const COUNT = 38;
+    const GOLDEN = Math.PI * (3 - Math.sqrt(5));
+    const SHAPES = ["cir", "hex", "sq", "cir", "dia", "cir"];
+    const nodes = Array.from({ length: COUNT }, (_, i) => {
+      const y = 1 - (i / (COUNT - 1)) * 2;
+      const rad = Math.sqrt(1 - y * y);
+      const th = GOLDEN * i;
+      return {
+        x: Math.cos(th) * rad,
+        y,
+        z: Math.sin(th) * rad,
+        r: 3.5 + ((i * 7) % 5) * 1.5,
+        shape: SHAPES[i % SHAPES.length],
+        dim: i % 3 === 2,
+      };
+    });
+    Object.assign(nodes[6], {
+      tag: "0x7f3a",
+      glow: "fast",
+      r: 9,
+      shape: "hex",
+      dim: false,
+    });
+    Object.assign(nodes[21], {
+      tag: "node_04",
+      glow: "slow",
+      r: 8,
+      shape: "cir",
+      dim: false,
+    });
 
-  const feed = () => {
-    const now = Date.now();
-    const coins = Array.from({ length: 7 }, (_, i) => ({
-      id: `${now}-${i}`,
-      delay: i * 0.13,
-      dx: (Math.random() - 0.5) * 26,
+    const dist3 = (a, b) => Math.hypot(a.x - b.x, a.y - b.y, a.z - b.z);
+    const seen = new Set();
+    const edges = [];
+    nodes.forEach((n, i) => {
+      nodes
+        .map((m, j) => ({ j, d: dist3(n, m) }))
+        .filter((o) => o.j !== i)
+        .sort((a, b) => a.d - b.d)
+        .slice(0, 2)
+        .forEach(({ j }) => {
+          const key = Math.min(i, j) + ":" + Math.max(i, j);
+          if (!seen.has(key)) {
+            seen.add(key);
+            edges.push([i, j]);
+          }
+        });
+    });
+    // Cross-link jarak jauh (dashed) — kesan relay antar-chain melintasi globe
+    edges.push([2, 25, true], [9, 32, true], [14, 35, true]);
+
+    const pulses = Array.from({ length: 6 }, (_, k) => ({
+      edge: (k * 13) % edges.length,
+      t: (k * 0.17) % 1,
+      speed: 0.004 + (k % 3) * 0.0015,
     }));
-    setBurst((b) => [...b, ...coins]);
-    setPartyKey((k) => k + 1);
-    setTimeout(() => {
-      setBurst((b) => b.filter((c) => !coins.some((k) => k.id === c.id)));
-    }, 2600);
+    return { NODES: nodes, EDGES: edges, PULSES: pulses };
+  }, []);
+
+  useEffect(() => {
+    const svg = svgRef.current;
+    const hit = hitRef.current;
+    if (!svg || !hit) return;
+
+    const CX = 210;
+    const CY = 200;
+    const RADIUS = 140;
+    const FOV = 3.6; // makin kecil makin kuat efek perspektifnya
+    const AUTO = 0.0012; // kecepatan putar default (rad/frame)
+    let rotY = 0;
+    let rotX = -0.38; // kemiringan sumbu ala bumi
+    let velY = AUTO;
+    let velX = 0;
+    let dragging = false;
+    let prev = { x: 0, y: 0 };
+    let raf;
+
+    const pulses = PULSES.map((p) => ({ ...p }));
+    const proj = NODES.map(() => ({ px: CX, py: CY, depth: 0 }));
+
+    const onDown = (e) => {
+      e.preventDefault();
+      dragging = true;
+      prev = { x: e.clientX, y: e.clientY };
+      velY = 0;
+      velX = 0;
+    };
+    const DRAG_SENS = 0.0018; // makin kecil makin "berat" globe-nya saat diseret
+    const MAX_VEL = 0.03; // batas kecepatan biar seretan cepat tidak bikin globe ngacir
+
+    const onMove = (e) => {
+      if (!dragging) return;
+      const dx = e.clientX - prev.x;
+      const dy = e.clientY - prev.y;
+      prev = { x: e.clientX, y: e.clientY };
+      velY = Math.max(-MAX_VEL, Math.min(MAX_VEL, dx * DRAG_SENS));
+      velX = Math.max(-MAX_VEL, Math.min(MAX_VEL, dy * DRAG_SENS));
+      rotY += velY;
+      rotX = Math.max(-1.2, Math.min(1.2, rotX + velX));
+    };
+    const onUp = () => {
+      dragging = false;
+    };
+
+    hit.addEventListener("pointerdown", onDown);
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+
+    const step = () => {
+      if (!dragging) {
+        rotY += velY;
+        rotX = Math.max(-1.2, Math.min(1.2, rotX + velX));
+        velY += (AUTO - velY) * 0.05; // momentum lemparan meluruh kembali ke putaran default
+        velX *= 0.9;
+      }
+
+      const cosY = Math.cos(rotY);
+      const sinY = Math.sin(rotY);
+      const cosX = Math.cos(rotX);
+      const sinX = Math.sin(rotX);
+
+      for (let i = 0; i < NODES.length; i++) {
+        const n = NODES[i];
+        const x = n.x * cosY + n.z * sinY;
+        let z = n.z * cosY - n.x * sinY;
+        const y = n.y * cosX - z * sinX;
+        z = n.y * sinX + z * cosX;
+
+        const persp = FOV / (FOV - z);
+        const p = proj[i];
+        p.px = CX + x * RADIUS * persp;
+        p.py = CY + y * RADIUS * persp;
+        p.depth = (z + 1) / 2;
+
+        const el = nodeElsRef.current[i];
+        if (el) {
+          el.setAttribute(
+            "transform",
+            `translate(${p.px} ${p.py}) scale(${(0.5 + p.depth * 0.7).toFixed(3)})`,
+          );
+          el.style.opacity = (0.15 + p.depth * 0.85).toFixed(2);
+        }
+      }
+
+      EDGES.forEach(([a, b], i) => {
+        const el = edgeElsRef.current[i];
+        if (!el) return;
+        el.setAttribute("x1", proj[a].px);
+        el.setAttribute("y1", proj[a].py);
+        el.setAttribute("x2", proj[b].px);
+        el.setAttribute("y2", proj[b].py);
+        const d = (proj[a].depth + proj[b].depth) / 2;
+        el.style.opacity = (0.06 + d * 0.38).toFixed(2);
+      });
+
+      pulses.forEach((p, i) => {
+        const el = pulseElsRef.current[i];
+        if (!el) return;
+        p.t += p.speed;
+        if (p.t > 1) p.t = 0;
+        const [a, b] = EDGES[p.edge];
+        el.setAttribute("cx", proj[a].px + (proj[b].px - proj[a].px) * p.t);
+        el.setAttribute("cy", proj[a].py + (proj[b].py - proj[a].py) * p.t);
+        const d = (proj[a].depth + proj[b].depth) / 2;
+        el.style.opacity = (Math.sin(Math.PI * p.t) * (0.2 + d * 0.7)).toFixed(
+          2,
+        );
+      });
+
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      hit.removeEventListener("pointerdown", onDown);
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+    };
+  }, [NODES, EDGES, PULSES]);
+
+  const hexPoints = (r) =>
+    Array.from({ length: 6 }, (_, i) => {
+      const a = (Math.PI / 3) * i - Math.PI / 2;
+      return `${(r * Math.cos(a)).toFixed(2)},${(r * Math.sin(a)).toFixed(2)}`;
+    }).join(" ");
+
+  const renderShape = (n) => {
+    const dimCls = n.dim ? "ng-shape dim" : "ng-shape";
+    if (n.shape === "hex")
+      return (
+        <>
+          <polygon className={dimCls} points={hexPoints(n.r)} />
+          <polygon className="ng-inner" points={hexPoints(n.r * 0.5)} />
+        </>
+      );
+    if (n.shape === "sq")
+      return (
+        <rect
+          className={dimCls}
+          x={-n.r}
+          y={-n.r}
+          width={n.r * 2}
+          height={n.r * 2}
+        />
+      );
+    if (n.shape === "dia")
+      return (
+        <rect
+          className={dimCls}
+          x={-n.r}
+          y={-n.r}
+          width={n.r * 2}
+          height={n.r * 2}
+          transform="rotate(45)"
+        />
+      );
+    return <circle className={dimCls} r={n.r} />;
   };
 
-  const bodyPath = `M 30 96
-    C 22 96, 18 102, 18 110
-    C 18 118, 24 124, 33 124
-    C 38 140, 58 154, 88 157
-    C 118 160, 152 154, 168 136
-    C 182 120, 184 96, 174 80
-    C 162 60, 132 50, 104 51
-    C 74 52, 48 64, 38 84
-    C 35 89, 32 92, 30 96 Z`;
-  const earPath = "M 64 60 C 58 44, 72 34, 86 38 C 86 50, 78 58, 68 62 Z";
-
   return (
-    <div
-      className="pf-piggy"
-      onClick={feed}
-      role="button"
-      tabIndex={0}
-      aria-label="Feed the piggy bank"
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") feed();
-      }}
-    >
-      <svg viewBox="0 0 210 178">
-        <defs>
-          <linearGradient id="pigGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#27272c" />
-            <stop offset="1" stopColor="#101013" />
-          </linearGradient>
-        </defs>
+    <div className="pf-netgraph" aria-hidden="true">
+      <svg ref={svgRef} viewBox="0 0 420 400">
+        {EDGES.map(([, , dash], i) => (
+          <line
+            className={`ng-edge ${dash ? "dash" : ""}`}
+            key={i}
+            ref={(el) => (edgeElsRef.current[i] = el)}
+            x1="210"
+            y1="200"
+            x2="210"
+            y2="200"
+          />
+        ))}
 
-        <BitcoinCoin className="pf-coin" />
+        {PULSES.map((_, i) => (
+          <circle
+            className="ng-pulse"
+            key={i}
+            ref={(el) => (pulseElsRef.current[i] = el)}
+            r="2.2"
+          />
+        ))}
 
-        {burst.map((c) => (
-          <g key={c.id} transform={`translate(${c.dx} 0)`}>
-            <BitcoinCoin
-              className="pf-coin-burst"
-              style={{ animationDelay: `${c.delay}s` }}
-            />
+        {NODES.map((n, i) => (
+          <g
+            className="ng-nodeg"
+            key={i}
+            ref={(el) => (nodeElsRef.current[i] = el)}
+            transform="translate(210 200)"
+            opacity="0"
+          >
+            {n.glow && (
+              <circle
+                className={`ng-glowring ${n.glow === "slow" ? "slow" : ""}`}
+                r={n.r + 6}
+              />
+            )}
+            {renderShape(n)}
+            {n.tag && (
+              <text className="ng-tag" x={n.r + 7} y="3">
+                {n.tag}
+              </text>
+            )}
           </g>
         ))}
 
-        <g
-          className={`pigbody ${partyKey > 0 ? "party-once" : ""}`}
-          key={partyKey}
-        >
-          <rect
-            className="pig-fill"
-            x="70"
-            y="140"
-            width="17"
-            height="26"
-            rx="7"
-          />
-          <rect
-            className="pig-fill"
-            x="132"
-            y="140"
-            width="17"
-            height="26"
-            rx="7"
-          />
-          <path className="pig-fill" d={bodyPath} />
-          <ellipse
-            cx="84"
-            cy="80"
-            rx="36"
-            ry="17"
-            fill="#ffffff"
-            opacity="0.05"
-          />
-          <path
-            className="pig-line"
-            d="M 42 88 C 38 98, 38 112, 43 121"
-            strokeWidth="1.3"
-            opacity="0.7"
-          />
-          <ellipse cx="25" cy="104" rx="1.7" ry="2.8" fill="var(--mist)" />
-          <ellipse cx="25" cy="114" rx="1.7" ry="2.8" fill="var(--mist)" />
-          <circle cx="60" cy="90" r="3.1" fill="var(--silver)" />
-          <path className="pig-fill" d={earPath} />
-          <path
-            className="pig-line"
-            d="M 177 94 C 193 88, 199 100, 189 105 C 183 108, 181 102, 186 99"
-            strokeWidth="1.6"
-          />
-          <rect
-            x="96"
-            y="46"
-            width="34"
-            height="6"
-            rx="3"
-            fill="var(--ink-0)"
-            stroke="var(--silver)"
-            strokeWidth="1.4"
-          />
-        </g>
+        <rect className="ng-accent" x="352" y="60" width="12" height="12" />
+        <circle className="ng-accent a2" cx="42" cy="272" r="6" />
+        <rect className="ng-accent a3" x="300" y="368" width="9" height="9" />
+        <circle
+          ref={hitRef}
+          className="ng-hit"
+          cx="210"
+          cy="200"
+          r="170"
+          fill="transparent"
+        />
       </svg>
-      <span className="pf-feedhint">click to feed</span>
+      <span className="pf-nethint">drag to rotate</span>
     </div>
   );
 }
@@ -1400,7 +1570,7 @@ function Home({ go }) {
   return (
     <main className="pf-page">
       <section className="pf-hero">
-        <PiggyBank />
+        <NetworkGraph />
         <h1 className="pf-name">
           <span style={{ display: "block", overflow: "hidden" }}>
             <span className="inner pf-greet">{PROFILE.greeting}</span>
@@ -1539,8 +1709,54 @@ function Work() {
   );
 }
 
+function CertCards({ items, emptyCode, openLabel }) {
+  if (items.length === 0) {
+    return (
+      <div className="pf-cert-empty">
+        <span className="code">
+          {emptyCode}.push(<span className="kw">next</span>)
+          <span className="pf-caret" />
+        </span>
+        <span className="sub">coming soon</span>
+      </div>
+    );
+  }
+  return (
+    <div className="pf-certgrid">
+      {items.map((item) => {
+        const isPdf = (item.file || "").toLowerCase().endsWith(".pdf");
+        return (
+          <a
+            className="pf-cert"
+            key={item.name}
+            href={item.file || "#"}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <div className="pf-cert-thumb">
+              {item.file && !isPdf ? (
+                <img src={item.file} alt={item.name} loading="lazy" />
+              ) : (
+                <span className="pf-cert-pdf">PDF</span>
+              )}
+            </div>
+            <div className="pf-cert-body">
+              <div className="pf-cert-name">{item.name}</div>
+              <div className="pf-cert-desc">{item.desc}</div>
+              <span className="pf-cert-open">
+                {openLabel} <span className="arrow">↗</span>
+              </span>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  );
+}
+
 function Profile() {
-  const { PROFILE, STACK, LANGUAGES, CERTIFICATES, CONTACTS } = useContent();
+  const { PROFILE, STACK, LANGUAGES, CERTIFICATES, EXPERIENCES, CONTACTS } =
+    useContent();
   const bioParts = PROFILE.bio.split("—");
 
   const resolveContact = (c) => {
@@ -1609,45 +1825,20 @@ function Profile() {
 
       <div className="pf-certs">
         <div className="pf-about-label">Certificates</div>
-        {CERTIFICATES.length > 0 ? (
-          <div className="pf-certgrid">
-            {CERTIFICATES.map((cert) => {
-              const isPdf = (cert.file || "").toLowerCase().endsWith(".pdf");
-              return (
-                <a
-                  className="pf-cert"
-                  key={cert.name}
-                  href={cert.file || "#"}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <div className="pf-cert-thumb">
-                    {cert.file && !isPdf ? (
-                      <img src={cert.file} alt={cert.name} loading="lazy" />
-                    ) : (
-                      <span className="pf-cert-pdf">PDF</span>
-                    )}
-                  </div>
-                  <div className="pf-cert-body">
-                    <div className="pf-cert-name">{cert.name}</div>
-                    <div className="pf-cert-desc">{cert.desc}</div>
-                    <span className="pf-cert-open">
-                      View certificate <span className="arrow">↗</span>
-                    </span>
-                  </div>
-                </a>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="pf-cert-empty">
-            <span className="code">
-              certificates.push(<span className="kw">next</span>)
-              <span className="pf-caret" />
-            </span>
-            <span className="sub">coming soon</span>
-          </div>
-        )}
+        <CertCards
+          items={CERTIFICATES}
+          emptyCode="certificates"
+          openLabel="View certificate"
+        />
+      </div>
+
+      <div className="pf-certs">
+        <div className="pf-about-label">Experiences</div>
+        <CertCards
+          items={EXPERIENCES}
+          emptyCode="experiences"
+          openLabel="View experience"
+        />
       </div>
 
       <div className="pf-marquee" aria-hidden="true">
